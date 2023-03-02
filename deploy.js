@@ -21,8 +21,8 @@ function installPM2() {
 // transfers local project to the remote server
 function transferProjectToRemote(failed, successful) {
     return ssh.putDirectory(
-        "../hackathon-starter",
-        "/home/ubuntu/hackathon-starter-temp",
+        "../my-hackathon-starter",
+        "/home/ubuntu/my-hackathon-starter-temp",
         {
             recursive: true,
             concurrency: 1,
@@ -50,7 +50,7 @@ function transferProjectToRemote(failed, successful) {
 // creates a temporary folder on the remote server
 function createRemoteTempFolder() {
     return ssh.execCommand(
-        "rm -rf hackathon-starter-temp && mkdir hackathon-starter-temp",
+        "rm -rf my-hackathon-starter-temp && mkdir my-hackathon-starter-temp",
         {
             cwd: "/home/ubuntu",
         }
@@ -66,7 +66,7 @@ function stopRemoteServices() {
 
 // delete the project folder
 function removeProjectApp() {
-    return ssh.execCommand("rm -rf hackathon-starter", {
+    return ssh.execCommand("rm -rf my-hackathon-starter", {
         cwd: "/home/ubuntu",
     });
 }
@@ -74,7 +74,7 @@ function removeProjectApp() {
 // updates the project source on the server
 function updateRemoteApp() {
     return ssh.execCommand(
-        "mkdir hackathon-starter && cp -r hackathon-starter-temp/* hackathon-starter/ && rm -rf hackathon-starter-temp",
+        "mkdir my-hackathon-starter && cp -r my-hackathon-starter-temp/* my-hackathon-starter/ && rm -rf my-hackathon-starter-temp",
         {
             cwd: "/home/ubuntu",
         }
@@ -83,14 +83,14 @@ function updateRemoteApp() {
 
 function installNodeModules() {
     return ssh.execCommand(`npm install`, {
-        cwd: "/home/ubuntu/hackathon-starter",
+        cwd: "/home/ubuntu/my-hackathon-starter",
     });
 }
 
 // restart mongodb and node services on the remote server
 function restartRemoteServices() {
     return ssh.execCommand(
-        "cd hackathon-starter && sudo service mongod start && pm2 start bin/www",
+        "cd my-hackathon-starter && sudo service mongod start && pm2 start bin/www",
         {
             cwd: "/home/ubuntu",
         }
@@ -113,11 +113,11 @@ function sshConnect() {
             return installPM2();
         })
         .then(function () {
-            console.log("Removing `hackathon-starter` folder.");
+            console.log("Removing `my-hackathon-starter` folder.");
             return removeProjectApp();
         })
         .then(function () {
-            console.log("Creating `hackathon-starter-temp` folder.");
+            console.log("Creating `my-hackathon-starter-temp` folder.");
             return createRemoteTempFolder();
         })
         .then(function (result) {
